@@ -9,10 +9,12 @@ def home(request):
 
 def info(request):
     items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-    return render(request, "store/item.html", {"info": items[0]})
+    return render(request, "store/item.html", {"items": items})
 
 def profile(request):
-    return render(request, "store/profile.html", {})
+    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, "store/profile.html", {'items': items})
 
-#def cart(request):
-#    return render(request, "store/cart.html", {})
+def cart(request):
+    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    return render(request, "store/cart.html", {'items': items})

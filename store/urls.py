@@ -5,5 +5,5 @@ urlpatterns = [
     url(r'^home$', views.home, name='home'),
     url(r'^info/$', views.info, name='info'),
     url(r'^profile/$', views.profile, name='profile'),
-#    url(r'^$', views.cart, name='cart'),
+    url(r'^cart$', views.cart, name='cart'),
 ]
