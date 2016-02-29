@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^info/', views.info, name='info'),
     url(r'^profile/', views.profile, name='profile'),
     url(r'^cart/', views.cart, name='cart'),
-    url(r'^item/<slug>', ProductView.as_view(), name='product')
+    # url(r'^item/<slug>', ProductView.as_view(), name='product')
 ]

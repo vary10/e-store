@@ -8,7 +8,7 @@
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="http://vary10.pythonanywhere.com/static/css/home.css" rel="stylesheet" type="text/css">
+        <link href="/static/css/home.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{% static 'css/home.css' %}">
     </head><body>
         <div class="navbar navbar-default navbar-inverse navbar-static-top">
@@ -20,7 +20,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="http://vary10.pythonanywhere.com/home"><span>Brand</span></a>
+                    <a class="navbar-brand" href="/home"><span>Brand</span></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar-ex-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -33,10 +33,10 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active">
-                            <a href="#">Cart</a>
+                            <a href="/cart">Cart</a>
                         </li>
                         <li>
-                            <a href="http://vary10.pythonanywhere.com/profile">Profile</a>
+                            <a href="/profile">Profile</a>
                         </li>
                     </ul>
                 </div>
@@ -57,7 +57,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-6">
-                        <img src="http://vary10.pythonanywhere.com/{{ item.image.url }}" class="img-responsive">
+                        <img src="{{ item.image.url }}" class="img-responsive">
                     </div>
                     <div class="col-md-6">
                         <h1>Backers</h1>
@@ -83,7 +83,7 @@
                         <h1>Heading</h1>
                             {{ item.description|linebreaks }}
                     </div>
-                    <a href="http://vary10.pythonanywhere.com/profile">
+                    <a href="/profile">
                     <div class="col-md-2">
                         <img src="http://pingendo.github.io/pingendo-bootstrap/assets/placeholder.png" class="img-responsive">
                     </div>
