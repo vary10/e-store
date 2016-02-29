@@ -1,32 +1,45 @@
-from django.shortcuts import render
-from django.utils import timezone
+from django.shortcuts import render, get_object_or_404, redirect
+import django.utils
 from .models import Item
+from django.http import HttpResponse
+from django.views.generic.base import TemplateView
 
 
 # Create your views here.
 def home(request):
-    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
     return render(request, "home.html", {'items': items})
 
 
 def info(request):
-    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
     return render(request, "item.html", {"items": items})
 
 
 def profile(request):
-    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
     return render(request, "profile.html", {'items': items})
 
 
 def cart(request):
-    items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
     return render(request, "cart.html", {'items': items})
 
-# class ProductView(TemplateView):
-#     template_name = "store/product.html"
+def add(request):
+    return HttpResponse("Added")
+
+
+# def choose_item(request):
+#     return redirect('info_by_item', item_id=request.POST['item'])
 #
-#     def get_context_data(self, context ...):
-#         context = super().get_context_data(context)
-#         context['item'] = Items.objects.get_or_404(id=self.request.GET.args?['slug'])
+# def info_by_item(request, item_id):
+#     item = get_object_or_404(Item, pk=item_id)
+#     return render(request, 'info.html', {'item': item})
+# class ProductView(TemplateView):
+#     template_name = "item.html"
+#
+#     def get(self, request, *args, **kwargs):
+#         context = super().get(self, request, *args, **kwargs)
+#         print(request, *args, **kwargs)
+#         context['item'] = Item.objects.filter
 #         return context
