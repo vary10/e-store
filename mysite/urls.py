@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from mysite import settings
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'', include('store.urls')),
 ]
+#urlpatterns += staticfiles_urlpatterns()
+#urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#a = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#urlpatterns +=  a

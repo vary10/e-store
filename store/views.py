@@ -18,3 +18,12 @@ def profile(request):
 def cart(request):
     items = Item.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
     return render(request, "store/cart.html", {'items': items})
+
+
+class ProductView(TemplateView):
+    template_name = "store/product.html"
+
+    def get_context_data(self, context ...):
+        context = super().get_context_data(context)
+        context['item'] = Items.objects.get_or_404(id=self.request.GET.args?['slug'])
+        return context
