@@ -1,0 +1,12 @@
+<div class="col-md-4">
+    <a href="/info/{{ item.id }}">
+        <img src="{{ item.image.url }}" class="img-responsive img-thumbnail">
+        <h2>{{ item.title }}</h2>
+    </a>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 60%;">60% Complete</div>
+    </div>
+    <p>{{ item.description|linebreaks }}</p>
+    <button id="item{{ item.id }}" class="add">
+        Add to cart</button>
+</div>

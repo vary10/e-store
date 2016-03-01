@@ -1,127 +1,86 @@
-{% load staticfiles %}
-{% load get_rows_range %}
-{% load get_slice %}
-{% load get_one_l %}
-{% load get_slice_l %}
+{% load staticfiles %} {% load get_rows_range %} {% load get_slice %} {% load get_by_index %} {% load get_every_3 %}
 
-<html><head>
-        <title>home</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/static/css/home.css" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/home.css' %}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    </head><body>
-        <div class="navbar navbar-default navbar-inverse navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/home"><span>Brand</span></a>
-                </div>
-                <div class="collapse navbar-collapse" id="navbar-ex-collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active">
-                            <a href="#">Sign in</a>
-                        </li>
-                        <li>
-                            <a href="#">Sign up</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active">
-                            <a href="/cart">Cart</a>
-                        </li>
-                        <li>
-                            <a href="/profile">Profile</a>
-                        </li>
-                    </ul>
-                </div>
+<html>
+
+<head>
+    <title>home</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/home.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+
+<body>
+
+    {% include "navbar.htm" %}
+    <div id="fullcarousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+
+            {% for item in items|get_by_index:"-3" %}
+            <div class="active item">
+                <img src="{{ item.image.url }}">
+                <a href="/info/{{ item.id }}">
+                    <div class="carousel-caption">
+                        <h2>{{ item.title }}</h2>
+                        <p>{{ item.description|linebreaks }}</p>
+                    </div>
+                </a>
             </div>
-        </div>
-        <div id="fullcarousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                {% for item in items|get_one_l:3 %}
-                                <div class="active item">
-                                    <img src="{{ item.image.url }}">
-                                    <a href="/info/{{ item.id }}">
-                                        <div class="carousel-caption">
-                                            <h2>{{ item.title }}</h2>
-                                            <p>{{ item.description|linebreaks }}</p>
-                                        </div>
-                                    </a>
-                                </div>
-                {% endfor %}
-                {% for item in items|get_slice_l:2 %}
-                                <div class="item">
-                                    <img src="{{ item.image.url }}">
-                                    <a href="/info/{{ item.id }}">
-                                        <div class="carousel-caption">
-                                            <h2>{{ item.title }}</h2>
-                                            <p>{{ item.description|linebreaks }}</p>
-                                        </div>
-                                    </a>
-                                </div>
+            {% endfor %}
 
-                {% endfor %}
+            {% for item in items|get_slice:"-2::" %}
+            <div class="item">
+                <img src="{{ item.image.url }}">
+                <a href="/info/{{ item.id }}">
+                    <div class="carousel-caption">
+                        <h2>{{ item.title }}</h2>
+                        <p>{{ item.description|linebreaks }}</p>
+                    </div>
+                </a>
             </div>
-            <a class="left carousel-control" href="#fullcarousel-example" data-slide="prev"><i class="icon-prev fa fa-angle-left"></i></a>
-            <a class="right carousel-control" href="#fullcarousel-example" data-slide="next"><i class="icon-next fa fa-angle-right"></i></a>
-        </div>
+            {% endfor %}
 
-        <script>
-        $(document).ready(function(){
-            $( "button.add" ).click(function(){
+        </div>
+        <a class="left carousel-control" href="#fullcarousel-example" data-slide="prev"><i class="icon-prev fa fa-angle-left"></i></a>
+        <a class="right carousel-control" href="#fullcarousel-example" data-slide="next"><i class="icon-next fa fa-angle-right"></i></a>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("button.add").click(function () {
                 var current_button = $(this);
                 $.ajax({
                     url: "/add-to-cart/",
                     type: "GET",
-                    data: {"item": $(this).attr('id')},
-                    success: function(data){
-                        current_button.replaceWith( data );
+                    data: {
+                        "item": $(this).attr('id')
+                    },
+                    success: function (data) {
+                        current_button.replaceWith(data);
                     }
                 });
             });
         });
-        </script>
-{#        <form action="{% url 'choose_item' %}" method="POST">#}
-{#    <select name="item">#}
-{#    {% for item in items %}#}
-{#        <option value="{{ item.id }}">{{ item.title }}</option>#}
-{#    {% endfor %}#}
-{#    </select>#}
-{#    <button>Show deals</button>#}
-{#</form>#}
-        {% for i in items|get_rows_range %}
-            <div class="section">
-                <div class="container">
-                    <div class="row">
-                        {% for item in items|get_slice:i %}
-                                <div class="col-md-4">
-                                    <a href="/info/{{ item.id }}">
-                                        <img src="{{ item.image.url }}" class="img-responsive img-thumbnail">
-                                    <h2>{{ item.title }}</h2>
-                                    </a>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: 60%;">60% Complete</div>
-                                    </div>
-                                    <p>{{ item.description|linebreaks }}</p>
-                                    <button id="item{{ item.id }}" class="add">
-                                        Add to cart</button>
-                                </div>
-                        {% endfor %}
-                    </div>
-                </div>
+    </script>
+
+    {% for i in items|get_rows_range %}
+    <div class="section">
+        <div class="container">
+            <div class="row">
+
+                {% for item in items|get_every_3:i %}
+                    {% include "item_card.htm" %}
+                {% endfor %}
+
             </div>
-        {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
 
+</body>
 
-
-</body></html>
+</html>
