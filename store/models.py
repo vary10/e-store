@@ -19,3 +19,7 @@ class Item(models.Model):
 
     def __str__(self):
         return self.title
+
+class User(models.Model):
+    name = models.CharField(max_length=25)
+    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d")
