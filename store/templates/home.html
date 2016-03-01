@@ -51,7 +51,7 @@
                 {% for item in items|get_one_l:3 %}
                                 <div class="active item">
                                     <img src="{{ item.image.url }}">
-                                    <a href="/info">
+                                    <a href="/info/{{ item.id }}">
                                         <div class="carousel-caption">
                                             <h2>{{ item.title }}</h2>
                                             <p>{{ item.description|linebreaks }}</p>
@@ -62,7 +62,7 @@
                 {% for item in items|get_slice_l:2 %}
                                 <div class="item">
                                     <img src="{{ item.image.url }}">
-                                    <a href="/info">
+                                    <a href="/info/{{ item.id }}">
                                         <div class="carousel-caption">
                                             <h2>{{ item.title }}</h2>
                                             <p>{{ item.description|linebreaks }}</p>
@@ -105,7 +105,7 @@
                     <div class="row">
                         {% for item in items|get_slice:i %}
                                 <div class="col-md-4">
-                                    <a href="/info">
+                                    <a href="/info/{{ item.id }}">
                                         <img src="{{ item.image.url }}" class="img-responsive img-thumbnail">
                                     <h2>{{ item.title }}</h2>
                                     </a>
