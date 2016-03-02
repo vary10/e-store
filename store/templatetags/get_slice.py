@@ -16,4 +16,6 @@ def get_slice(value, arg):
         a += len(value)
     if b < 0:
         b += len(value)
+    if a < 0 or b < 0:
+        return value
     return value[a:b:c]

@@ -4,7 +4,7 @@
         <h2>{{ item.title }}</h2>
     </a>
     <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 60%;">60% Complete</div>
+        <div class="progress-bar" role="progressbar" style="width: {{ item.percentage }}%;">{{ item.percentage }}% Complete</div>
     </div>
     <p>{{ item.description|linebreaks }}</p>
     <button id="item{{ item.id }}" class="add">
