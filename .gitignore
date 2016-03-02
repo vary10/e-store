@@ -4,4 +4,3 @@ env
 db.sqlite3
 .DS_Store
 .idea
-uploads/^(__init__.py).*
