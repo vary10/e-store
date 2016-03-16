@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store',
     'social.apps.django_app.default',
+    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE_CLASSES = [
