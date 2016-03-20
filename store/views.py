@@ -38,9 +38,24 @@ def profile(request):
     items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
     return render(request, "profile.html", {'items': items})
 
+@login_required
 def cart(request):
+    paypal_dict = {
+        "business": "vary10-facilitator@gmail.com",
+        "amount": "100.00",
+        "currency_code": "RUB",
+        "item_name": "products in store",
+        "invoice": "INV-00001",
+        "notify_url": reverse('paypal-ipn'),
+        "return_url": "http://vary10.pythonanywhere.com/payment/success/",
+        "cancel_return": "http://vary10.pythonanywhere.com/cart/",
+        "custom": str(request.user.id)
+    }
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
     items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
-    return render(request, "cart.html", {'items': items})
+    context = {"form": form, "paypal_dict": paypal_dict, "items": items}
+    return render(request, "cart.html", context)
 
 def add(request):
     return HttpResponse("Added")
@@ -53,22 +68,4 @@ def info(request, item_id):
 def paypal_success(request):
     return HttpResponse("Money is mine. Thanks.")
 
-@login_required
-def paypal_pay(request):
-    paypal_dict = {
-        "business": "vary10-facilitator_api1.gmail.com",
-        "amount": "100.00",
-        "currency_code": "RUB",
-        "item_name": "products in store",
-        "invoice": "INV-00001",
-        "notify_url": reverse('paypal-ipn'),
-        "return_url": "http://vary10.pythonanywhere.com/payment/success/",
-        "cancel_return": "http://vary10.pythonanywhere.com/payment/cart/",
-        "custom": str(request.user.id)
-    }
-
-    # Create the instance.
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    context = {"form": form, "paypal_dict": paypal_dict}
-    return render(request, "payment.html", context)
 

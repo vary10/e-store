@@ -17,7 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from mysite import settings
 import social.apps.django_app.urls
-import paypal
+import paypal.standard.ipn.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
