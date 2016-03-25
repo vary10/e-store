@@ -60,8 +60,10 @@ def cart(request):
 def add(request):
     return HttpResponse("Added")
 
-def info(request, item_id):
-    item = get_object_or_404(Item, pk=item_id)
+def info(request, item_title):
+    item_title = str(item_title).replace("-", " ")
+    item_title = item_title.replace("+", "-")
+    item = get_object_or_404(Item, title__iexact=item_title)
     return render(request, 'item.html', {'item': item})
 
 @csrf_exempt

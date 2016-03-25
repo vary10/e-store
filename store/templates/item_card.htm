@@ -1,12 +1,13 @@
+{% load sep %}
 <div class="col-md-4">
-    <a href="/info/{{ item.id }}">
-        <img src="{{ item.image.url }}" class="img-responsive img-thumbnail">
+    <a href="/info/{{ item.title|sep }}">
+        <img src="{{ item.image.url }}" alt="item image" class="img-thumbnail">
         <h2>{{ item.title }}</h2>
     </a>
     <div class="progress">
         <div class="progress-bar" role="progressbar" style="width: {{ item.percentage }}%;">{{ item.percentage }}% Complete</div>
     </div>
-    <p>{{ item.description|linebreaks }}</p>
+    {{ item.description|linebreaks }}
     <button id="item{{ item.id }}" class="add">
         Add to cart</button>
 </div>

@@ -1,33 +1,22 @@
-{% load staticfiles %} {% load get_rows_range %} {% load get_slice %} {% load get_by_index %} {% load get_every_3 %}
-
-<html>
-
-<head>
-    <title>home</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-    <script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/static/css/home.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% extends "base.html" %}
+{% load get_rows_range %} {% load get_slice %} {% load get_by_index %} {% load get_every_3 %} {% load sep %}
+{% block title %}
+<title>home</title>
+{% endblock %}
+{% block more %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-</head>
-
-<body>
-
-    {% include "navbar.htm" %}
-
+{% endblock %}
+{% block content %}
     <div id="fullcarousel-example" data-interval="false" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
 
             {% for item in items|get_by_index:"-3" %}
             <div class="active item">
-                <img src="{{ item.image.url }}">
-                <a href="/info/{{ item.id }}">
+                <img src="{{ item.image.url }}" alt="item image" class="img-thumbnail">
+                <a href="/info/{{ item.title|sep }}">
                     <div class="carousel-caption">
                         <h2>{{ item.title }}</h2>
-                        <p>{{ item.description|linebreaks }}</p>
+                        {{ item.description|linebreaks }}
                     </div>
                 </a>
             </div>
@@ -35,11 +24,11 @@
 
             {% for item in items|get_slice:"-2::" %}
             <div class="item">
-                <img src="{{ item.image.url }}">
-                <a href="/info/{{ item.id }}">
+                <img src="{{ item.image.url }}" alt="item image" class="img-thumbnail">
+                <a href="/info/{{ item.title|sep }}">
                     <div class="carousel-caption">
                         <h2>{{ item.title }}</h2>
-                        <p>{{ item.description|linebreaks }}</p>
+                        {{ item.description|linebreaks }}
                     </div>
                 </a>
             </div>
@@ -81,7 +70,4 @@
         </div>
     </div>
     {% endfor %}
-
-</body>
-
-</html>
+{% endblock %}

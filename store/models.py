@@ -15,9 +15,14 @@ class Item(models.Model):
     gathered = models.IntegerField(default=0)
     image = models.ImageField(upload_to="%Y/%m/%d/", height_field=None, width_field=None, max_length=100)
 
-    def publish(self):
-        self.published_date = django.utils.timezone.now()
-        self.save()
+    def save(self, *args, **kwargs):
+        self.full_clean() # performs regular validation then clean()
+        super(Item, self).save(*args, **kwargs)
+
+
+    def clean(self):
+        if self.title:
+            self.title = " ".join(self.title.split())
 
     def __str__(self):
         return self.title
