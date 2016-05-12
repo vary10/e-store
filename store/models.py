@@ -1,9 +1,10 @@
 from django.db import models
 import django.utils
+from django.contrib.auth.models import User
 
 
 class Item(models.Model):
-    author = models.ForeignKey('auth.User')
+    creator = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
     created_date = models.DateTimeField(
@@ -19,7 +20,6 @@ class Item(models.Model):
         self.full_clean() # performs regular validation then clean()
         super(Item, self).save(*args, **kwargs)
 
-
     def clean(self):
         if self.title:
             self.title = " ".join(self.title.split())
@@ -30,6 +30,33 @@ class Item(models.Model):
     def percentage(self):
         return int(self.gathered / self.goal * 100)
 
+
 class User(models.Model):
+    email = models.CharField(max_length=25)
+    password = models.CharField(max_length=25)
     name = models.CharField(max_length=25)
     avatar = models.ImageField(upload_to="avatars/%Y/%m/%d")
+
+
+class Cart(models.Model):
+    date_created = models.DateTimeField(default=django.utils.timezone.now, editable=False)
+    date_modified = models.DateTimeField(default=django.utils.timezone.now, editable=True)
+    total = models.IntegerField()
+    payed = models.BooleanField(False)
+    items = models.ManyToManyField(Item)
+    owner = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=False,
+    )
+
+
+class Payment(models.Model):
+    pp_id = models.CharField(max_length=40)
+    date = models.DateTimeField()
+    cart = models.OneToOneField(
+        Cart,
+        on_delete=models.CASCADE,
+        primary_key=False,
+    )
+
