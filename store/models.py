@@ -31,11 +31,11 @@ class Item(models.Model):
         return int(self.gathered / self.goal * 100)
 
 
-class User(models.Model):
-    email = models.CharField(max_length=25)
-    password = models.CharField(max_length=25)
-    name = models.CharField(max_length=25)
-    avatar = models.ImageField(upload_to="avatars/%Y/%m/%d")
+# class User(models.Model):
+#     email = models.CharField(max_length=25)
+#     password = models.CharField(max_length=25)
+#     name = models.CharField(max_length=25)
+#     avatar = models.ImageField(upload_to="avatars/%Y/%m/%d")
 
 
 class Cart(models.Model):
@@ -45,7 +45,7 @@ class Cart(models.Model):
     payed = models.BooleanField(False)
     items = models.ManyToManyField(Item)
     owner = models.OneToOneField(
-        User,
+        'auth.User',
         on_delete=models.CASCADE,
         primary_key=False,
     )
@@ -59,4 +59,3 @@ class Payment(models.Model):
         on_delete=models.CASCADE,
         primary_key=False,
     )
-

@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from paypal.standard.forms import PayPalPaymentsForm
+from django.forms import modelformset_factory
 
 
 def accounts_login(request):
@@ -14,6 +15,12 @@ def accounts_login(request):
         return HttpResponse("{0} <a href='/accounts/logout'>exit</a>".format(request.user))
     else:
         return HttpResponse("<a href='/login/vk-oauth2/'>login with VK</a> <a href='/login/facebook/?next=https://vary10.pythonanywhere.com/'>login with Facebook</a>")
+
+@login_required
+def create(request):
+    formset = modelformset_factory(Item, fields=('title', 'image', 'description', 'cpu', 'goal'))
+    return render(request, "product_form.html", {'formset': formset})
+
 
 def home(request):
     items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')

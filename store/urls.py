@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^accounts/login/$', views.accounts_login, name='login'),
     url(r'^accounts/profile/$', views.account_profile, name='profile'),
     url(r'^payment/success/$', views.paypal_success, name='success'),
+    url(r'^create/$', views.create, name='create'),
 ]
