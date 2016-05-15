@@ -2,12 +2,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 import django.utils
-from .models import Item
+from .models import Item, ItemForm
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from paypal.standard.forms import PayPalPaymentsForm
-from django.forms import modelformset_factory
 
 
 def accounts_login(request):
@@ -18,8 +17,19 @@ def accounts_login(request):
 
 @login_required
 def create(request):
-    formset = modelformset_factory(Item, fields=('title', 'image', 'description', 'cpu', 'goal'))
-    return render(request, "product_form.html", {'formset': formset})
+    if request.method == "POST":
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_item = form.save(commit=False)
+            new_item.creator = request.user
+            new_item.save()
+            form.save_m2m()
+            print("yes")
+            return HttpResponse("<p>Success! Now wait for the publication.</p><a href='/'>Home</a>")
+        return HttpResponse("<p>Something went wrong, <a href='{0}'>go back</a>".format(request.META["HTTP_REFERER"]))
+    else:
+        form = ItemForm()
+    return render(request, "product_form.html", {'formset': form})
 
 
 def home(request):

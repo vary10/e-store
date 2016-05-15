@@ -1,6 +1,7 @@
 from django.db import models
 import django.utils
 from django.contrib.auth.models import User
+from django.forms import ModelForm
 
 
 class Item(models.Model):
@@ -59,3 +60,8 @@ class Payment(models.Model):
         on_delete=models.CASCADE,
         primary_key=False,
     )
+
+class ItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ['title', 'description', 'image', 'cpu', 'goal']
