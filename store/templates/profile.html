@@ -33,15 +33,16 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>You offered</h1>
+                    <h2><a href=/create/>Add</a></h2>g
                 </div>
             </div>
         </div>
     </div>
-    {% for i in items|get_rows_range %}
+    {% for i in my_items|get_rows_range %}
     <div class="section">
         <div class="container">
             <div class="row">
-                {% for item in items|get_every_3:i %}
+                {% for item in my_items|get_every_3:i %}
                     {% include "item_card.htm" %}
                 {% endfor %}
             </div>
@@ -59,11 +60,11 @@
             </div>
         </div>
     </div>
-    {% for i in items|get_rows_range %}
+    {% for i in bought_items|get_rows_range %}
     <div class="section">
         <div class="container">
             <div class="row">
-                {% for item in items|get_every_3:i %}
+                {% for item in bought_items|get_every_3:i %}
                     {% include "item_card.htm" %}
                 {% endfor %}
             </div>

@@ -52,8 +52,9 @@ def account_logout(request):
     return redirect('/')
 
 def profile(request):
-    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
-    return render(request, "profile.html", {'items': items})
+    my_items = Item.objects.filter(creator=request.user).order_by('published_date')
+    bought_items = Item.objects.all()
+    return render(request, "profile.html", {'my_items': my_items, "bought_items": bought_items})
 
 @login_required
 def cart(request):
