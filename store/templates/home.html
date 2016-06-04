@@ -41,22 +41,25 @@
     </div>
 
     <script>
-        $(document).ready(function () {
-            $("button.add").click(function () {
-                var current_button = $(this);
-                $.ajax({
-                    url: "/add-to-cart/",
-                    type: "GET",
-                    data: {
-                        "item": $(this).attr('id')
-                    },
-                    success: function (data) {
-                        current_button.replaceWith(data);
-                    }
-                });
+        $(document).ready(function(){
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+          });
+          $( "button.add" ).click(function(){
+            var current_button = $(this);
+            $.ajax({
+                url: "/add-to-cart/",
+                type: "POST",
+                data: {"item": $(this).attr('id')},
+                success: function(data){
+                  current_button.replaceWith( data );
+                }
             });
+           });
         });
     </script>
+
+
 
     {% for i in items|get_rows_range %}
     <div class="section">

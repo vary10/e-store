@@ -6,6 +6,28 @@
 {% endblock %}
 
 {% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({
+                data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+            });
+            $( "button.add" ).click(function(){
+                var current_button = $(this);
+                $.ajax({
+                    url: "/add-to-cart/",
+                    type: "POST",
+                    data: {"item": $(this).attr('id')},
+                    success: function(data){
+                        current_button.replaceWith( data );
+                    }
+                });
+            });
+        });
+    </script>
+
 
     <div class="section section-info">
         <div class="container">
@@ -26,7 +48,8 @@
                     <h1>Backers</h1>
                     <h3>Total</h3>
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.semper nisi.</p>
-                    <a href=#><a class="btn btn-primary">Click me</a></a>
+                    <button id="item{{ item.id }}" class="add">
+                    Add to cart</button>
                 </div>
             </div>
         </div>

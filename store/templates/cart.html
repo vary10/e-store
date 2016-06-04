@@ -5,7 +5,26 @@
 <title>cart</title>
 {% endblock %}
 {% block content %}
-    {% for item in items|get_by_index:"-2" %}
+
+
+     <script>
+        $(document).ready(function(){
+          $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+          });
+          $( "button.delete-button" ).click(function(){
+            var current_button = $(this);
+            $.ajax({
+                url: "/delete/",
+                type: "POST",
+                data: {"item": $(this).attr('id')},
+            });
+           });
+        });
+    </script>
+
+
+    {% for item in items %}
     <div class="section">
         <div class="container">
             <div class="row">
@@ -14,19 +33,19 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <a href="/info/{{ item.title|sep }}">
-                                        <img src="{{ item.image.url }}" class="img-responsive" alt="item image">
+                                    <a href="/info/{{ item.item.title|sep }}">
+                                        <img src="{{ item.item.image.url }}" class="img-responsive" alt="item image">
                                     </a>
                                 </div>
                                 <div class="col-md-2">
-                                    <a href="/info/{{ item.title|sep }}">
-                                        <h2>{{ item.title }}</h2>
+                                    <a href="/info/{{ item.item.title|sep }}">
+                                        <h2>{{ item.item.title }}</h2>
                                     </a>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="col-md-12">
                                         <div class="col-md-5">
-                                            <h3>{{ item.cpu }} Rub</h3>
+                                            <h3>{{ item.item.cpu }} Rub</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -35,16 +54,15 @@
                                         </i>
                                 </div>
                                 <div class="col-md-2">
-                                    <h3>2</h3>
+                                    <h3>{{ item.number }}</h3>
                                 </div>
                                 <div class="col-md-2">
-                                    <h1>subtotal</h1>
+                                    <h1>{{ item.total }}</h1>
                                 </div>
                                 <div class="col-md-1">
-                                    <a href="#">
-                                        <i class="fa fa-3x fa-fw fa-trash-o">
-                                            </i>
-                                    </a>
+                                    <button id="item{{ item.id }}" class="delete-button">
+                                        <i class="fa fa-3x fa-fw fa-trash-o"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +76,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="text-center">Total</h1>
+                    <h1 class="text-center">Total: {{ cart.total }}</h1>
                 </div>
             </div>
         </div>

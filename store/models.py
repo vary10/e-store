@@ -42,14 +42,29 @@ class Item(models.Model):
 class Cart(models.Model):
     date_created = models.DateTimeField(default=django.utils.timezone.now, editable=False)
     date_modified = models.DateTimeField(default=django.utils.timezone.now, editable=True)
-    total = models.IntegerField()
-    payed = models.BooleanField(False)
-    items = models.ManyToManyField(Item)
-    owner = models.OneToOneField(
+    paid = models.BooleanField(default=False)
+    invoice = models.IntegerField(default=2)
+
+    owner = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
         primary_key=False,
     )
+    def total(self):
+        total = 0
+        for item in self.cartitem_set.all():
+            total += item.total()
+        return total
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, primary_key=False)
+    number = models.IntegerField(editable=True)
+
+    def total(self):
+        return self.number * self.item.cpu
+
 
 
 class Payment(models.Model):
