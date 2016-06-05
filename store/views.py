@@ -7,6 +7,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.urlresolvers import reverse
 from paypal.standard.forms import PayPalPaymentsForm
+from django.core.cache import cache
+
 
 
 def accounts_login(request):
@@ -39,7 +41,8 @@ def profile(request):
 
 
 def home(request):
-    items = Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date')
+    items = cache.get_or_set('products',
+                     Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date'))
     return render(request, "home.html", {'items': items})
 
 
@@ -47,7 +50,6 @@ def home(request):
 def check_cart(request):
     if not Cart.objects.filter(owner=request.user,paid=False).order_by("date_created"):
         tmp = Cart.objects.latest("date_created")
-
         new_cart = Cart()
         new_cart.owner = request.user
         new_cart.invoice = tmp.invoice + 1
@@ -67,6 +69,8 @@ def create(request):
         return HttpResponse("<p>Something went wrong, <a href='{0}'>go back</a>".format(request.META["HTTP_REFERER"]))
     else:
         form = ItemForm()
+    cache.set('products',
+              Item.objects.filter(published_date__lte=django.utils.timezone.now()).order_by('published_date'))
     return render(request, "product_form.html", {'formset': form})
 
 
@@ -111,7 +115,6 @@ def add(request):
         new_cart_item.number = 1
         new_cart_item.save()
     else:
-        print(it[0])
         it[0].number = it[0].number + 1
         it[0].save()
     return HttpResponse("Added")
