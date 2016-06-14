@@ -48,12 +48,20 @@ def home(request):
 
 @login_required
 def check_cart(request):
-    if not Cart.objects.filter(owner=request.user,paid=False).order_by("date_created"):
+    if not Cart.objects.all():
+        new_cart = Cart()
+        new_cart.owner = request.user
+        new_cart.invoice = 100
+        new_cart.save()
+    elif not Cart.objects.filter(owner=request.user,paid=False).order_by("date_created"):
         tmp = Cart.objects.latest("date_created")
         new_cart = Cart()
         new_cart.owner = request.user
         new_cart.invoice = tmp.invoice + 1
         new_cart.save()
+    else:
+        new_cart = Cart.objects.filter(owner=request.user,paid=False).latest("date_created")
+    return new_cart
 
 
 @login_required
@@ -83,7 +91,7 @@ def info(request, item_title):
 
 @login_required
 def cart(request):
-    check_cart(request)
+    cart = check_cart(request)
     paypal_dict = {
         "business": "vary10-facilitator@gmail.com",
         "currency_code": "RUB",
@@ -94,7 +102,6 @@ def cart(request):
         "custom": str(request.user.id)
     }
     # Create the instance.
-    cart = Cart.objects.filter(owner=request.user, paid=False).latest('date_created')
     items = cart.cartitem_set.all()
     paypal_dict["amount"] = cart.total()
     paypal_dict["invoice"] = cart.invoice
@@ -105,8 +112,7 @@ def cart(request):
 
 
 def add(request):
-    check_cart(request)
-    cart = Cart.objects.filter(owner=request.user, paid=False).latest('date_created')
+    cart = check_cart(request)
     it = CartItem.objects.filter(item_id=int(request.POST.get('item')[4:]), cart=cart)
     if not it:
         new_cart_item = CartItem()
